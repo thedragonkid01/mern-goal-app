@@ -3,10 +3,14 @@ const dotenv = require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 const colors = require("colors");
 const { errorHandler } = require("./middlewares/errorHandler");
+const db = require("./config/db");
 
 const goalRoute = require("./routes/goalRoute");
 
 const app = express();
+
+// Connect database
+db.connect();
 
 // Body Parser
 app.use(express.urlencoded({ extended: true }));
