@@ -14,6 +14,10 @@ class goalController {
   // @URI:      api/goals
   // @Method:   POST
   add = (req, res) => {
+    if (!req.body.text) {
+      res.status(400);
+      throw new Error("Please enter text");
+    }
     res.json({ ...req.body, message: "POST goalcontroller" });
   };
 
