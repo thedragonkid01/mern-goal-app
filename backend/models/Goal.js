@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const GoalSchema = new Schema(
   {
+    user: Schema.Types.ObjectId,
     text: { type: String, required: true },
   },
   {

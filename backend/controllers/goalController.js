@@ -5,14 +5,14 @@ class goalController {
   // @URI:      api/goals
   // @Method:   GET
   get = asyncHandler(async (req, res) => {
-    const goals = await Goal.find({});
+    const goals = await Goal.find({ user: req.user._id });
     res.json(goals);
   });
 
   // @URI:      api/goals/:id
   // @Method:   GET
   getById = asyncHandler(async (req, res) => {
-    const goal = await Goal.findById(req.params.id);
+    const goal = await Goal.findOne({ _id: req.params.id, user: req.user._id });
 
     if (!goal) {
       res.status(400);
@@ -31,6 +31,7 @@ class goalController {
     }
 
     const newGoal = await Goal.create({
+      user: req.user._id,
       text: req.body.text,
     });
 
@@ -45,8 +46,8 @@ class goalController {
       throw new Error("Please enter text");
     }
 
-    const updatedGoal = await Goal.findByIdAndUpdate(
-      req.params.id,
+    const updatedGoal = await Goal.findOneAndUpdate(
+      { _id: req.params.id, user: req.user._id },
       {
         text: req.body.text,
       },
@@ -64,7 +65,10 @@ class goalController {
   // @URI:      api/goals/:id
   // @Method:   DELETE
   delete = asyncHandler(async (req, res) => {
-    const result = await Goal.findByIdAndDelete(req.params.id);
+    const result = await Goal.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user._id,
+    });
     if (!result) {
       res.status(400);
       throw new Error("Unable to delete data");
