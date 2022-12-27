@@ -12,6 +12,13 @@ class userController {
       throw new Error("Please enter full info");
     }
 
+    // check duplicate
+    const existedUser = await User.findOne({ email: req.body.email });
+    if (existedUser) {
+      res.status(400);
+      throw new Error("Email is already taken");
+    }
+
     // hash password
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
